@@ -1,0 +1,74 @@
+# ---- HRMS Folder (Vite React Frontend) ---- #
+
+# Logs
+HRMS/logs
+HRMS/*.log
+HRMS/npm-debug.log*
+HRMS/yarn-debug.log*
+HRMS/yarn-error.log*
+HRMS/pnpm-debug.log*
+HRMS/lerna-debug.log*
+
+# Dependency directories
+HRMS/node_modules/
+
+# Production build directories
+HRMS/dist/
+HRMS/dist-ssr/
+
+# Local environment files
+HRMS/*.local
+HRMS/.env
+
+# Editor directories and files
+HRMS/.vscode/*
+HRMS/!.vscode/extensions.json
+HRMS/.idea
+HRMS/.DS_Store
+HRMS/*.suo
+HRMS/*.ntvs*
+HRMS/*.njsproj
+HRMS/*.sln
+HRMS/*.sw?
+
+
+# ---- Server Folder (Node.js Backend) ---- #
+
+# Logs
+Server/logs
+Server/*.log
+Server/npm-debug.log*
+Server/yarn-debug.log*
+Server/yarn-error.log*
+Server/pnpm-debug.log*
+Server/lerna-debug.log*
+
+# Dependency directories
+Server/node_modules/
+
+# Production build directories
+Server/dist/
+Server/build/
+
+# Environment files
+Server/.env
+
+# Editor directories and files
+Server/.vscode/*
+Server/!.vscode/extensions.json
+Server/.idea
+Server/.DS_Store
+Server/*.suo
+Server/*.ntvs*
+Server/*.njsproj
+Server/*.sln
+Server/*.sw?
+
+# ---- Common OS & IDE Files ---- #
+
+# macOS generated files
+.DS_Store
+
+# Windows generated files
+Thumbs.db
+*.bak
