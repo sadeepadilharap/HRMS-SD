@@ -2,5 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Set body background color depending on mode */
+body {
+  @apply bg-white text-black; /* Day mode styles */
+}
 
-
+.dark body {
+  @apply bg-black text-white; /* Night mode styles */
+}
