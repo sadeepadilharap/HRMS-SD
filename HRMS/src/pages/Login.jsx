@@ -13,7 +13,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post('http://localhost:5000/login', values)  // Include values in post request
+      .post('http://localhost:3000/auth/login', values)  // Include values in post request
       .then((result) => console.log(result))
       .catch((err) => console.log(err));
   };
@@ -57,6 +57,7 @@ const Login = () => {
             color="primary"
             fullWidth
             className="bg-accent text-white hover:bg-accentDarker transition-colors"
+            onClick={handleSubmit}
           >
             Login
           </Button>
