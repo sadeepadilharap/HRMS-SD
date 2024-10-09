@@ -55,10 +55,16 @@ const SideNavbar = ({ isExpanded, toggleSidebar }) => {
 
       {/* Navigation Menu */}
       <List component="nav" className="flex-grow">
-        {/* Profile */}
+        {/* Dashboard */}
+        <ListItem button>
+          <DashboardIcon className="mr-3" />
+          <ListItemText primary="Dashboard" className={`${isExpanded ? 'block' : 'hidden'}`} />
+        </ListItem>
+
+        {/* Profile (Renamed from "Our Profile") */}
         <ListItem button>
           <ProfileIcon className="mr-3" />
-          <ListItemText primary="Our Profile" className={`${isExpanded ? 'block' : 'hidden'}`} />
+          <ListItemText primary="Profile" className={`${isExpanded ? 'block' : 'hidden'}`} />
         </ListItem>
 
         {/* Employees */}
@@ -69,12 +75,12 @@ const SideNavbar = ({ isExpanded, toggleSidebar }) => {
         </ListItem>
         <Collapse in={openEmployees && isExpanded} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItem button className="pl-8 hover:bg-secondary rounded-lg">
-              <EventNoteIcon className="mr-2" />
+            <ListItem button className="pl-10 hover:bg-secondary rounded-lg text-sm"> {/* Increased padding for indentation, smaller font */}
+              <EventNoteIcon fontSize="small" className="mr-2" /> {/* Smaller icon */}
               <ListItemText primary="Leave Requests" />
             </ListItem>
-            <ListItem button className="pl-8 hover:bg-secondary rounded-lg">
-              <GroupIcon className="mr-2" />
+            <ListItem button className="pl-10 hover:bg-secondary rounded-lg text-sm"> {/* Increased padding for indentation, smaller font */}
+              <GroupIcon fontSize="small" className="mr-2" /> {/* Smaller icon */}
               <ListItemText primary="All Employees" />
             </ListItem>
           </List>
@@ -88,22 +94,16 @@ const SideNavbar = ({ isExpanded, toggleSidebar }) => {
         </ListItem>
         <Collapse in={openPayroll && isExpanded} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItem button className="pl-8 hover:bg-secondary rounded-lg">
-              <MonetizationOnIcon className="mr-2" />
+            <ListItem button className="pl-10 hover:bg-secondary rounded-lg text-sm"> {/* Increased padding for indentation, smaller font */}
+              <MonetizationOnIcon fontSize="small" className="mr-2" /> {/* Smaller icon */}
               <ListItemText primary="Payslip" />
             </ListItem>
-            <ListItem button className="pl-8 hover:bg-secondary rounded-lg">
-              <MonetizationOnIcon className="mr-2" />
+            <ListItem button className="pl-10 hover:bg-secondary rounded-lg text-sm"> {/* Increased padding for indentation, smaller font */}
+              <MonetizationOnIcon fontSize="small" className="mr-2" /> {/* Smaller icon */}
               <ListItemText primary="Employee Salary" />
             </ListItem>
           </List>
         </Collapse>
-
-        {/* Dashboard */}
-        <ListItem button>
-          <DashboardIcon className="mr-3" />
-          <ListItemText primary="Dashboard" className={`${isExpanded ? 'block' : 'hidden'}`} />
-        </ListItem>
       </List>
 
       {/* Logout Button at the Bottom */}

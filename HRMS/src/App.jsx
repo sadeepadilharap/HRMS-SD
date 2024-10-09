@@ -4,6 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';  // Import your custom theme
 import Login from './pages/Login'; // Example of using the theme
 import Dashboard from './pages/Dashboard'; // Example of using the theme
+import Profile from './pages/Profile'; // Example of using the theme
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './Components/Layout'; // Import Layout
 
@@ -35,6 +36,22 @@ function App() {
               </Layout>
             } 
           />
+
+          <Route 
+            path='/profile' 
+            element={
+              <Layout 
+                isSidebarExpanded={isSidebarExpanded} 
+                toggleSidebar={toggleSidebar}
+              >
+                <div className={`${isSidebarExpanded ? 'ml-6' : 'ml-6'} transition-all duration-300`}>
+                  <Profile />
+                </div>
+              </Layout>
+            } 
+          />
+
+          
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
