@@ -2,11 +2,7 @@
 import React from 'react';
 import { Typography, Card, CardContent, Divider, Grid } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import HomeIcon from '@mui/icons-material/Home';
-import PhoneIcon from '@mui/icons-material/Phone';
-import EmailIcon from '@mui/icons-material/Email';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import GroupIcon from '@mui/icons-material/Group';
+
 
 const Profile = () => {
     // Sample data to display
@@ -101,7 +97,7 @@ const Profile = () => {
                             </Typography>
                         </Grid>
                         {/* Address */}
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sm={6}>
                             <Typography variant="body1" className="text-text">
                                 <strong>Address:</strong> {userDetails.address}
                             </Typography>
