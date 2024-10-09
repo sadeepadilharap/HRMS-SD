@@ -29,7 +29,7 @@ function App() {
                 isSidebarExpanded={isSidebarExpanded} 
                 toggleSidebar={toggleSidebar}
               >
-                <div className={`${isSidebarExpanded ? 'ml-64' : 'ml-20'} transition-all duration-300`}>
+                <div className={`${isSidebarExpanded ? 'ml-6' : 'ml-6'} transition-all duration-300`}>
                   <Dashboard />
                 </div>
               </Layout>
