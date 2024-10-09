@@ -1,13 +1,42 @@
 // src/App.js
-import React from 'react';
+import React, { useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';  // Import your custom theme
 import Login from './pages/Login'; // Example of using the theme
+import Dashboard from './pages/Dashboard'; // Example of using the theme
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './Components/Layout'; // Import Layout
 
 function App() {
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsSidebarExpanded(prev => !prev);
+  };
+
   return (
     <ThemeProvider theme={theme}>
-      <Login />  {/* Your components will now use the custom theme */}
+      <BrowserRouter>
+        <Routes>
+          {/* Login route without Layout */}
+          <Route path='/login' element={<Login/>} />
+          
+          {/* Dashboard route with Layout */}
+          <Route 
+            path='/dashboard' 
+            element={
+              <Layout 
+                isSidebarExpanded={isSidebarExpanded} 
+                toggleSidebar={toggleSidebar}
+              >
+                <div className={`${isSidebarExpanded ? 'ml-64' : 'ml-20'} transition-all duration-300`}>
+                  <Dashboard />
+                </div>
+              </Layout>
+            } 
+          />
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

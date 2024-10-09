@@ -6,8 +6,8 @@ import Button from '@mui/material/Button';
 
 const Login = () => {
   const [values, setValues] = React.useState({
-    userID: '',
-    password: '',
+    user_id: '',
+    user_password: '',
   });
 
   const handleSubmit = (event) => {
@@ -32,7 +32,7 @@ const Login = () => {
               variant="outlined"
               fullWidth
               value={values.userID}
-              onChange={(e) => setValues({ ...values, userID: e.target.value })}
+              onChange={(e) => setValues({ ...values, user_id: e.target.value })}
               required
             />
           </div>
@@ -45,7 +45,7 @@ const Login = () => {
               variant="outlined"
               fullWidth
               value={values.password}
-              onChange={(e) => setValues({ ...values, password: e.target.value })}
+              onChange={(e) => setValues({ ...values, user_password: e.target.value })}
               required
             />
           </div>

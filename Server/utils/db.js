@@ -1,10 +1,11 @@
-import mysql from 'mysql';
+import mysql from 'mysql2';
 
 const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '12345678',
-    database: 'hrms_sd'
+    database: 'hrms_sd',
+    waitForConnections: true,
 });
 
 con.connect((err) => {
@@ -14,3 +15,5 @@ con.connect((err) => {
     }
     console.log('Connected to database');
 });
+
+export default con;
