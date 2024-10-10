@@ -13,7 +13,11 @@ const DeleteConfirmationDialog = ({ open, handleClose, employee }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={() => handleClose(true)} color="secondary" variant="contained">
+        <Button 
+          onClick={() => handleClose(true)} 
+          variant="contained" 
+          sx={{ backgroundColor: 'red', color: 'white', '&:hover': { backgroundColor: '#b22222' } }} // Custom red styling
+        >
           Delete
         </Button>
       </DialogActions>

@@ -1,7 +1,7 @@
 // src/pages/AllEmployees.jsx
 import React, { useState } from 'react';
 import {
-    TextField, IconButton, MenuItem, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Avatar, Typography
+    TextField, IconButton, MenuItem, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Avatar, Typography, Tooltip
 } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import EditIcon from '@mui/icons-material/Edit';
@@ -13,6 +13,7 @@ import Select from '@mui/material/Select';
 import AddEmployeeDialog from '../Components/AddEmployeeDialog';
 import ViewMoreDialog from '../Components/ViewMoreDialog';
 import EditEmployeeDialog from '../Components/EditEmployeeDialog';
+import DeleteConfirmationDialog from '../Components/DeleteConfirmationDialog'; // Import the delete dialog
 
 const employees = [
     { id: 'E001', name: 'John Doe', email: 'john@example.com', phone: '555-555-1234', role: 'Developer', image: 'https://via.placeholder.com/50' },
@@ -26,6 +27,7 @@ const AllEmployees = () => {
     const [openAddDialog, setOpenAddDialog] = useState(false);
     const [openViewDialog, setOpenViewDialog] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false); // State for delete dialog
     const [selectedEmployee, setSelectedEmployee] = useState(null);
 
     const handleSearchByChange = (event) => {
@@ -95,6 +97,11 @@ const AllEmployees = () => {
             recruitmentDate: '2022-01-01' // Placeholder
         });
         setOpenEditDialog(true);
+    };
+
+    const handleDelete = (employee) => {
+        setSelectedEmployee(employee);
+        setOpenDeleteDialog(true); // Open delete confirmation dialog
     };
 
     return (
@@ -174,15 +181,21 @@ const AllEmployees = () => {
                                 <TableCell>{employee.phone}</TableCell>
                                 <TableCell>{employee.role}</TableCell>
                                 <TableCell>
-                                    <IconButton color="primary" className="mr-2" onClick={() => handleViewMore(employee)}>
-                                        <MoreHorizIcon />
-                                    </IconButton>
-                                    <IconButton color="secondary" className="mr-2" onClick={() => handleEdit(employee)}>
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton style={{ color: 'red' }}>
-                                        <DeleteIcon />
-                                    </IconButton>
+                                    <Tooltip title="View More Info">
+                                        <IconButton color="primary" className="mr-2" onClick={() => handleViewMore(employee)}>
+                                            <MoreHorizIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Edit">
+                                        <IconButton color="secondary" className="mr-2" onClick={() => handleEdit(employee)}>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Delete">
+                                        <IconButton style={{ color: 'red' }} onClick={() => handleDelete(employee)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Tooltip>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -203,6 +216,11 @@ const AllEmployees = () => {
             {/* Edit Employee Dialog */}
             {openEditDialog && selectedEmployee && (
                 <EditEmployeeDialog open={openEditDialog} handleClose={() => setOpenEditDialog(false)} employee={selectedEmployee} />
+            )}
+
+            {/* Delete Confirmation Dialog */}
+            {openDeleteDialog && selectedEmployee && (
+                <DeleteConfirmationDialog open={openDeleteDialog} handleClose={() => setOpenDeleteDialog(false)} employee={selectedEmployee} />
             )}
         </div>
     );
