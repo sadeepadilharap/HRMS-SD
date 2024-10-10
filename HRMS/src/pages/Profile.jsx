@@ -45,7 +45,7 @@ const Profile = () => {
             {/* Profile Details */}
             <Card className="w-full max-w-4xl shadow-lg">
                 <CardContent>
-                    <Typography variant="h6" className="text-primary font-bold mb-4 pb-10">Personal Information</Typography>
+                    <Typography variant="h6" className="text-primary font-bold mb-4 pb-6">Personal Information</Typography>
 
                     <Grid container spacing={4}>
                         {/* Employee ID */}
@@ -120,7 +120,7 @@ const Profile = () => {
                         <Divider className="mb-6" />
                     </div>
 
-                    <Typography variant="h6" className="text-primary font-bold mb-4 py-10">Emergency Contact Information</Typography>
+                    <Typography variant="h6" className="text-primary font-bold mb-4 pt-10 pb-6">Emergency Contact Information</Typography>
                     <Grid container spacing={4}>
                         {/* Emergency Contact Name */}
                         <Grid item xs={12} sm={6}>
@@ -147,7 +147,7 @@ const Profile = () => {
                     </div>
 
 
-                    <Typography variant="h6" className="text-primary font-bold mb-4 py-10">Employment Details</Typography>
+                    <Typography variant="h6" className="text-primary font-bold mb-4 pt-10 pb-6">Employment Details</Typography>
                     <Grid container spacing={4}>
                         {/* Section Name */}
                         <Grid item xs={12} sm={6}>
