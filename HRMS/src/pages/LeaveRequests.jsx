@@ -143,7 +143,7 @@ const LeaveRequests = () => {
                   <IconButton color="primary">
                     <CheckIcon />
                   </IconButton>
-                  <IconButton color="secondary">
+                  <IconButton color="secondary" >
                     <CloseIcon />
                   </IconButton>
                 </TableCell>

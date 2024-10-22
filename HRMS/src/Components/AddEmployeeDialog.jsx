@@ -1,5 +1,4 @@
-// src/components/AddEmployeeDialog.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -17,8 +16,52 @@ import HomeIcon from '@mui/icons-material/Home';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import GroupIcon from '@mui/icons-material/Group';
+import axios from 'axios';
 
 const AddEmployeeDialog = ({ open, handleClose }) => {
+  const [formData, setFormData] = useState({
+    employeeId: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    birthDate: '',
+    maritalStatus: '',
+    gender: '',
+    workEmail: '',
+    address: '',
+    telNo: '',
+    recruitmentDate: '',
+    emergencyContactName: '',
+    emergencyContactAddress: '',
+    emergencyContactPhone: '',
+    sectionName: '',
+    departmentName: '',
+    branchName: '',
+    supervisor: ''
+  });
+
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = () => {
+    axios
+      .post('http://localhost:3000/api/employee', formData) // Replace with your actual API endpoint
+      .then((response) => {
+        console.log('Employee added:', response.data);
+        handleClose(); // Close the dialog
+      })
+      .catch((error) => {
+        console.error('Error adding employee:', error);
+      });
+  };
+
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Add New Employee</DialogTitle>
@@ -30,37 +73,85 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
             </Typography>
             <Grid container spacing={4}>
               <Grid item xs={12} sm={6}>
-                <TextField label="Employee ID" variant="outlined" fullWidth />
+                <TextField
+                  label="Employee ID"
+                  name="employeeId"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.employeeId}
+                  onChange={handleInputChange}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="First Name" variant="outlined" fullWidth />
+                <TextField
+                  label="First Name"
+                  name="firstName"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Middle Name" variant="outlined" fullWidth />
+                <TextField
+                  label="Middle Name"
+                  name="middleName"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.middleName}
+                  onChange={handleInputChange}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Last Name" variant="outlined" fullWidth />
+                <TextField
+                  label="Last Name"
+                  name="lastName"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Birth Date"
+                  name="birthDate"
                   variant="outlined"
                   type="date"
                   InputLabelProps={{ shrink: true }}
                   fullWidth
+                  value={formData.birthDate}
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Marital Status" variant="outlined" fullWidth />
+                <TextField
+                  label="Marital Status"
+                  name="maritalStatus"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.maritalStatus}
+                  onChange={handleInputChange}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Gender" variant="outlined" fullWidth />
+                <TextField
+                  label="Gender"
+                  name="gender"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.gender}
+                  onChange={handleInputChange}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Work Email"
+                  name="workEmail"
                   variant="outlined"
                   fullWidth
+                  value={formData.workEmail}
+                  onChange={handleInputChange}
                   InputProps={{
                     startAdornment: <EmailIcon className="mr-2 text-primary" />
                   }}
@@ -69,8 +160,11 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
               <Grid item xs={12}>
                 <TextField
                   label="Address"
+                  name="address"
                   variant="outlined"
                   fullWidth
+                  value={formData.address}
+                  onChange={handleInputChange}
                   InputProps={{
                     startAdornment: <HomeIcon className="mr-2 text-primary" />
                   }}
@@ -79,8 +173,11 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Telephone Number"
+                  name="telNo"
                   variant="outlined"
                   fullWidth
+                  value={formData.telNo}
+                  onChange={handleInputChange}
                   InputProps={{
                     startAdornment: <PhoneIcon className="mr-2 text-primary" />
                   }}
@@ -89,10 +186,13 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Recruitment Date"
+                  name="recruitmentDate"
                   variant="outlined"
                   type="date"
                   InputLabelProps={{ shrink: true }}
                   fullWidth
+                  value={formData.recruitmentDate}
+                  onChange={handleInputChange}
                 />
               </Grid>
             </Grid>
@@ -104,13 +204,23 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
             </Typography>
             <Grid container spacing={4}>
               <Grid item xs={12} sm={6}>
-                <TextField label="Emergency Contact Name" variant="outlined" fullWidth />
+                <TextField
+                  label="Emergency Contact Name"
+                  name="emergencyContactName"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.emergencyContactName}
+                  onChange={handleInputChange}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Emergency Contact Address"
+                  name="emergencyContactAddress"
                   variant="outlined"
                   fullWidth
+                  value={formData.emergencyContactAddress}
+                  onChange={handleInputChange}
                   InputProps={{
                     startAdornment: <HomeIcon className="mr-2 text-primary" />
                   }}
@@ -119,8 +229,11 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Emergency Contact Phone"
+                  name="emergencyContactPhone"
                   variant="outlined"
                   fullWidth
+                  value={formData.emergencyContactPhone}
+                  onChange={handleInputChange}
                   InputProps={{
                     startAdornment: <PhoneIcon className="mr-2 text-primary" />
                   }}
@@ -135,19 +248,43 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
             </Typography>
             <Grid container spacing={4}>
               <Grid item xs={12} sm={6}>
-                <TextField label="Section Name" variant="outlined" fullWidth />
+                <TextField
+                  label="Section Name"
+                  name="sectionName"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.sectionName}
+                  onChange={handleInputChange}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Department Name" variant="outlined" fullWidth />
+                <TextField
+                  label="Department Name"
+                  name="departmentName"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.departmentName}
+                  onChange={handleInputChange}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Branch Name" variant="outlined" fullWidth />
+                <TextField
+                  label="Branch Name"
+                  name="branchName"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.branchName}
+                  onChange={handleInputChange}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Supervisor"
+                  name="supervisor"
                   variant="outlined"
                   fullWidth
+                  value={formData.supervisor}
+                  onChange={handleInputChange}
                   InputProps={{
                     startAdornment: <GroupIcon className="mr-2 text-primary" />
                   }}
@@ -159,7 +296,7 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose} variant="contained" color="primary">
+        <Button onClick={handleSubmit} variant="contained" color="primary">
           Add
         </Button>
       </DialogActions>

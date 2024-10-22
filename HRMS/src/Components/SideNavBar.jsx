@@ -7,10 +7,12 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import { useNavigate } from 'react-router-dom';
 
 const SideNavbar = ({ isExpanded, toggleSidebar }) => {
   const [openEmployees, setOpenEmployees] = useState(false);
   const [openPayroll, setOpenPayroll] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleEmployeesClick = () => {
     if (!isExpanded) {
@@ -56,13 +58,13 @@ const SideNavbar = ({ isExpanded, toggleSidebar }) => {
       {/* Navigation Menu */}
       <List component="nav" className="flex-grow">
         {/* Dashboard */}
-        <ListItem button>
+        <ListItem button onClick={()=> navigate('/dashboard')}>
           <DashboardIcon className="mr-3" />
           <ListItemText primary="Dashboard" className={`${isExpanded ? 'block' : 'hidden'}`} />
         </ListItem>
 
         {/* Profile (Renamed from "Our Profile") */}
-        <ListItem button>
+        <ListItem button onClick={()=> navigate('/profile')}>
           <ProfileIcon className="mr-3" />
           <ListItemText primary="Profile" className={`${isExpanded ? 'block' : 'hidden'}`} />
         </ListItem>
@@ -75,11 +77,11 @@ const SideNavbar = ({ isExpanded, toggleSidebar }) => {
         </ListItem>
         <Collapse in={openEmployees && isExpanded} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItem button className="pl-10 hover:bg-secondary rounded-lg text-sm"> {/* Increased padding for indentation, smaller font */}
+            <ListItem button className="pl-10 hover:bg-secondary rounded-lg text-sm" onClick={()=> navigate('/leaverequests')}> {/* Increased padding for indentation, smaller font */}
               <EventNoteIcon fontSize="small" className="mr-2" /> {/* Smaller icon */}
               <ListItemText primary="Leave Requests" />
             </ListItem>
-            <ListItem button className="pl-10 hover:bg-secondary rounded-lg text-sm"> {/* Increased padding for indentation, smaller font */}
+            <ListItem button className="pl-10 hover:bg-secondary rounded-lg text-sm" onClick={()=> navigate('/allemployees')}> {/* Increased padding for indentation, smaller font */}
               <GroupIcon fontSize="small" className="mr-2" /> {/* Smaller icon */}
               <ListItemText primary="All Employees" />
             </ListItem>

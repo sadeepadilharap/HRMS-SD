@@ -17,7 +17,7 @@ router.post('/login', (req, res) => {
             res.cookie('token', token)
             return res.json({ loginStatus: true})
         }else{
-            return res.json({ loginStatus: false, Error: 'Invalid user_id or password' })
+            return res.json({ loginStatus: false, Error: 'Invalid User ID or Password' })
         }
 
     })

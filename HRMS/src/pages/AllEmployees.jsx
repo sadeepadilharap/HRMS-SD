@@ -15,11 +15,6 @@ import ViewMoreDialog from '../Components/ViewMoreDialog';
 import EditEmployeeDialog from '../Components/EditEmployeeDialog';
 import DeleteConfirmationDialog from '../Components/DeleteConfirmationDialog'; // Import the delete dialog
 
-const employees = [
-    { id: 'E001', name: 'John Doe', email: 'john@example.com', phone: '555-555-1234', role: 'Developer', image: 'https://via.placeholder.com/50' },
-    { id: 'E002', name: 'Jane Smith', email: 'jane@example.com', phone: '555-555-5678', role: 'Designer', image: 'https://via.placeholder.com/50' },
-    { id: 'E003', name: 'Mark Johnson', email: 'mark@example.com', phone: '555-555-9876', role: 'Project Manager', image: 'https://via.placeholder.com/50' },
-];
 
 const AllEmployees = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -29,6 +24,20 @@ const AllEmployees = () => {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false); // State for delete dialog
     const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [employees, setEmployees] = useState([]);
+
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            try {
+                const response = await fetch('/api/employees'); // Replace with your actual API route
+                const data = await response.json();
+                setEmployees(data); // Set the fetched employee data
+            } catch (error) {
+                console.error('Error fetching employees:', error);
+            }
+        };
+        fetchEmployees();
+    }, []); // Empty dependency array to run only on mount
 
     const handleSearchByChange = (event) => {
         setSearchBy(event.target.value);

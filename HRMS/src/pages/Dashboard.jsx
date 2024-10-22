@@ -7,9 +7,13 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
+import { useNavigate } from 'react-router-dom';
+
 
 const Dashboard = () => {
   const today = new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const navigate = useNavigate();
+
 
   return (
     <div className="p-6 bg-background min-h-screen flex flex-col items-center">
@@ -25,7 +29,7 @@ const Dashboard = () => {
       <Grid container spacing={4} justifyContent="center"> {/* Center grid items */}
         {/* Total Employees */}
         <Grid item xs={12} sm={6} lg={4}>
-          <Card className="hover:shadow-2xl transition-shadow duration-300">
+          <Card className="hover:shadow-2xl transition-shadow duration-300" onClick={() => navigate('/allemployees')}>
             <CardContent className="text-center">
               <PeopleIcon fontSize="large" className="text-primary mb-2" />
               <Typography variant="h6" className="text-text font-bold">Total Employees</Typography>
@@ -36,7 +40,7 @@ const Dashboard = () => {
 
         {/* Latest Leave Request */}
         <Grid item xs={12} sm={6} lg={4}>
-          <Card className="hover:shadow-2xl transition-shadow duration-300">
+          <Card className="hover:shadow-2xl transition-shadow duration-300" onClick={() => navigate('/leaverequests')}>
             <CardContent className="text-center">
               <EventNoteIcon fontSize="large" className="text-primary mb-2" />
               <Typography variant="h6" className="text-text font-bold">Latest Leave Request</Typography>
@@ -59,7 +63,7 @@ const Dashboard = () => {
 
         {/* Pending Leave Requests */}
         <Grid item xs={12} sm={6} lg={4}>
-          <Card className="hover:shadow-2xl transition-shadow duration-300">
+          <Card className="hover:shadow-2xl transition-shadow duration-300" onClick={() => navigate('/leaverequests')}>
             <CardContent className="text-center">
               <PendingActionsIcon fontSize="large" className="text-primary mb-2" />
               <Typography variant="h6" className="text-text font-bold">Pending Leave Requests</Typography>
