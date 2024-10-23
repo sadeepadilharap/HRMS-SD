@@ -35,10 +35,12 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
     emergencyContactName: '',
     emergencyContactAddress: '',
     emergencyContactPhone: '',
-    sectionName: '',
-    departmentName: '',
-    branchName: '',
-    supervisor: ''
+    sectionID: '',
+    departmentID: '',
+    branchID: '',
+    supervisorID: '',
+    employmentStatusID: '',
+    roleID: ''
   });
 
   // Dummy data for dropdowns
@@ -48,7 +50,11 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
   const [departmentOptions, setDepartmentOptions] = useState([]); // State for department options
   const [branchOptions, setBranchOptions] = useState([]); // State for branch options
   const [supervisorOptions, setSupervisorOptions] = useState([]); // State for supervisor options
-  const [selectedDept, setSelectedDept] = useState(''); // State for selected department
+  const [selectedDept, setSelectedDept] = useState(0); // State for selected department
+  const [employmentStatusOptions, setEmploymentStatusOptions] = useState([]); // State for employment status options
+  const [roles, setRoles] = useState([]); // Add this line for roles
+
+
 
 
   useEffect(() => {
@@ -103,6 +109,32 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
     };
     fetchSectionsByDepartment(); // Call the function to fetch section data
   }, [selectedDept]);
+
+  useEffect(() => {
+    const fetchEmploymentStatuses = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/employeeMoreInfo/status'); // Your backend API endpoint
+        setEmploymentStatusOptions(response.data); // Set the fetched employment status data
+      } catch (error) {
+        console.error('Error fetching employment statuses:', error);
+      }
+    };
+
+    fetchEmploymentStatuses(); // Fetch employment statuses when the component loads
+  }, []);
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/employeeMoreInfo/role'); // Your backend API endpoint for roles
+        setRoles(response.data); // Set the fetched role data
+      } catch (error) {
+        console.error('Error fetching roles:', error);
+      }
+    };
+
+    fetchRoles(); // Fetch roles when the component loads
+  }, []);
 
 
 
@@ -339,35 +371,38 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
                 <TextField
                   select
                   label="Department Name"
-                  name="departmentName"
+                  name="departmentID"
                   variant="outlined"
                   fullWidth
-                  value={formData.departmentName}
+                  value={formData.departmentName} // This should be an empty string initially
                   onChange={(e) => {
                     handleInputChange(e);
                     handleDeptChange(e);
                   }}
                 >
+
+                  {/* Render department options dynamically */}
                   {departmentOptions.map((department, index) => (
                     <MenuItem key={index} value={department.department_id}>
-                      {department.department_name} {/* Assuming your backend sends 'department_name' */}
+                      {department.department_name}
                     </MenuItem>
                   ))}
                 </TextField>
+
               </Grid>
 
               <Grid item xs={12} sm={6}>
                 <TextField
                   select
                   label="Section Name"
-                  name="sectionName"
+                  name="sectionID"
                   variant="outlined"
                   fullWidth
-                  value={formData.sectionName}
+                  value={formData.sectionID}
                   onChange={handleInputChange}
                 >
                   {sectionOptions.map((section, index) => (
-                    <MenuItem key={index} value={section.section_name}>
+                    <MenuItem key={index} value={section.section_id}>
                       {section.section_name} {/* Access section_name correctly */}
                     </MenuItem>
                   ))}
@@ -378,14 +413,14 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
                 <TextField
                   select
                   label="Branch Name"
-                  name="branchName"
+                  name="branchID"
                   variant="outlined"
                   fullWidth
-                  value={formData.branchName}
+                  value={formData.branchID}
                   onChange={handleInputChange}
                 >
                   {branchOptions.map((branch, index) => (
-                    <MenuItem key={index} value={branch.branch_name}>
+                    <MenuItem key={index} value={branch.branch_id}>
                       {branch.branch_name} {/* Assuming your backend sends 'branch_name' */}
                     </MenuItem>
                   ))}
@@ -395,10 +430,10 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
                 <TextField
                   select
                   label="Supervisor"
-                  name="supervisor"
+                  name="supervisorID"
                   variant="outlined"
                   fullWidth
-                  value={formData.supervisor}
+                  value={formData.supervisorID}
                   onChange={handleInputChange}
                 >
                   {supervisorOptions.map((supervisor) => (
@@ -409,6 +444,44 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
                 </TextField>
 
               </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  select
+                  label="Employment Status"
+                  name="employmentStatusID"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.employmentStatusID}
+                  onChange={handleInputChange}
+                >
+                  {employmentStatusOptions.map((status, index) => (
+                    <MenuItem key={index} value={status.employment_status_id}>
+                      {status.status_name} {/* Assuming your backend sends 'status_name' */}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  select
+                  label="Role"
+                  name="roleID" // Ensure this matches your formData structure
+                  variant="outlined"
+                  fullWidth
+                  value={formData.roleID}
+                  onChange={handleInputChange}
+                >
+                  {roles.map((role, index) => (
+                    <MenuItem key={index} value={role.role_id}>
+                      {role.role_name} {/* Assuming your backend sends 'role_name' */}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+
+
             </Grid>
           </CardContent>
         </Card>

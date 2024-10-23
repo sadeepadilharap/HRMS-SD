@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/section/:depID', (req, res) => {
   const deptID = req.params.depID;
 
-  const query = `SELECT section_name FROM section WHERE department_id = ${deptID}`;
+  const query = `SELECT section_name, section_id FROM section WHERE department_id = ${deptID}`;
 
   db.query(query, (err, result) => {
     if (err) {
@@ -19,7 +19,7 @@ router.get('/section/:depID', (req, res) => {
 
 
 router.get('/branch', (req, res) => {
-  const query = 'SELECT branch_name FROM branch';
+  const query = 'SELECT branch_name,branch_id FROM branch';
 
   db.query(query, (err, result) => {
     if (err) {
@@ -55,6 +55,30 @@ router.get('/department', (req, res) => {
   db.query(query, (err, result) => {
     if (err) {
       console.error('Error fetching departments:', err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+    res.status(200).json(result);
+  });
+});
+
+router.get('/status', (req, res) => {
+  const query = 'SELECT * FROM EmploymentStatus';
+
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error('Error fetching employment statuses:', err);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+    res.status(200).json(result);
+  });
+});
+
+router.get('/role', (req, res) => {
+  const query = 'SELECT role_id, role_name FROM role';
+
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error('Error fetching roles:', err);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
     res.status(200).json(result);
