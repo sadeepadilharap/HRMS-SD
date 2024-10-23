@@ -17,7 +17,6 @@ import {
 import HomeIcon from '@mui/icons-material/Home';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
-import GroupIcon from '@mui/icons-material/Group';
 import axios from 'axios';
 
 const AddEmployeeDialog = ({ open, handleClose }) => {
@@ -45,24 +44,69 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
   // Dummy data for dropdowns
   const maritalStatusOptions = ['Married', 'Unmarrried'];
   const genderOptions = ['Male', 'Female', 'Other'];
-  const [sectionOptions, setSections] = useState([]); // State to store section names
-  const departmentOptions = ['Operations', 'Support', 'Development', 'Marketing'];
-  const branchOptions = ['New York', 'San Francisco', 'Chicago', 'Los Angeles'];
-  const supervisorOptions = ['John Doe', 'Jane Smith', 'Michael Johnson'];
+  const [sectionOptions, setSections] = useState([]);
+  const [departmentOptions, setDepartmentOptions] = useState([]); // State for department options
+  const [branchOptions, setBranchOptions] = useState([]); // State for branch options
+  const [supervisorOptions, setSupervisorOptions] = useState([]); // State for supervisor options
+  const [selectedDept, setSelectedDept] = useState(''); // State for selected department
+
 
   useEffect(() => {
-    // Fetch sections when the component loads
-    const fetchSections = async () => {
+    const fetchBranches = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/employeeMoreInfo/section'); // Your backend API endpoint
-        setSections(response.data); // Set the fetched sections in state
+        const response = await axios.get('http://localhost:3000/api/employeeMoreInfo/branch'); // Your backend API endpoint
+        setBranchOptions(response.data); // Set the fetched branch data
       } catch (error) {
-        console.error('Error fetching sections:', error);
+        console.error('Error fetching branches:', error);
       }
     };
 
-    fetchSections(); // Call the function to fetch section data
+    fetchBranches(); // Fetch branches when the component loads
   }, []);
+
+  useEffect(() => {
+    const fetchSupervisors = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/employeeMoreInfo/supervisor');
+        setSupervisorOptions(response.data); // Set the fetched supervisors in state
+      } catch (error) {
+        console.error('Error fetching supervisors:', error);
+      }
+    };
+
+    fetchSupervisors(); // Fetch supervisors when the component loads
+  }, []);
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/employeeMoreInfo/department'); // Your backend API endpoint
+        setDepartmentOptions(response.data); // Set the fetched department data
+      } catch (error) {
+        console.error('Error fetching departments:', error);
+      }
+    };
+
+    fetchDepartments(); // Fetch departments when the component loads
+  }, []);
+
+
+  useEffect(() => {
+    const fetchSectionsByDepartment = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/employeeMoreInfo/section/${selectedDept}`); // Your backend API endpoint
+        setSections(response.data); // Set the fetched sections in state
+      }
+      catch (error) {
+        console.error('Error fetching sections:', error);
+      }
+    };
+    fetchSectionsByDepartment(); // Call the function to fetch section data
+  }, [selectedDept]);
+
+
+
+
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -72,6 +116,11 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
       [name]: value
     });
   };
+
+  const handleDeptChange = (e) => {
+    setSelectedDept(e.target.value);
+    console.log('Selected department:', e.target.value);
+  }
 
   // Handle form submission
   const handleSubmit = () => {
@@ -237,7 +286,7 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
 
             <Divider className="my-6" />
 
-            <Typography variant="h6" className="text-primary font-bold mb-4 pb-6">
+            <Typography variant="h6" className="text-primary font-bold  mb-4 pt-10 pb-6">
               Emergency Contact Information
             </Typography>
             <Grid container spacing={4}>
@@ -285,6 +334,28 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
               Employment Details
             </Typography>
             <Grid container spacing={4}>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  select
+                  label="Department Name"
+                  name="departmentName"
+                  variant="outlined"
+                  fullWidth
+                  value={formData.departmentName}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                    handleDeptChange(e);
+                  }}
+                >
+                  {departmentOptions.map((department, index) => (
+                    <MenuItem key={index} value={department.department_id}>
+                      {department.department_name} {/* Assuming your backend sends 'department_name' */}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+
               <Grid item xs={12} sm={6}>
                 <TextField
                   select
@@ -302,23 +373,7 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
                   ))}
                 </TextField>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  select
-                  label="Department Name"
-                  name="departmentName"
-                  variant="outlined"
-                  fullWidth
-                  value={formData.departmentName}
-                  onChange={handleInputChange}
-                >
-                  {departmentOptions.map((department) => (
-                    <MenuItem key={department} value={department}>
-                      {department}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
+
               <Grid item xs={12} sm={6}>
                 <TextField
                   select
@@ -329,9 +384,9 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
                   value={formData.branchName}
                   onChange={handleInputChange}
                 >
-                  {branchOptions.map((branch) => (
-                    <MenuItem key={branch} value={branch}>
-                      {branch}
+                  {branchOptions.map((branch, index) => (
+                    <MenuItem key={index} value={branch.branch_name}>
+                      {branch.branch_name} {/* Assuming your backend sends 'branch_name' */}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -347,21 +402,22 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
                   onChange={handleInputChange}
                 >
                   {supervisorOptions.map((supervisor) => (
-                    <MenuItem key={supervisor} value={supervisor}>
-                      {supervisor}
+                    <MenuItem key={supervisor.supervisor_id} value={supervisor.supervisor_id}>
+                      {supervisor.full_name} (ID: {supervisor.supervisor_id})
                     </MenuItem>
                   ))}
                 </TextField>
+
               </Grid>
             </Grid>
           </CardContent>
         </Card>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="secondary">
+        <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleSubmit} color="primary">
+        <Button onClick={handleSubmit} variant="contained" color="primary">
           Add Employee
         </Button>
       </DialogActions>
