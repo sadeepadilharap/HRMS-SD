@@ -75,22 +75,6 @@ const addEmployee = (req, res) => {
     roleID || null
   ];
 
-  // Insert emergency contact details
-  const queryEmergencyContact = `
-    INSERT INTO emergency_contact (
-      employee_id,
-      name,
-      address,
-      phone
-    ) VALUES (?, ?, ?, ?)
-  `;
-
-  const emergencyContactValues = [
-    employeeId,
-    emergencyContactName || null,
-    emergencyContactAddress || null,
-    emergencyContactPhone || null
-  ];
 
   db.query(queryEmployee, employeeValues, (err, result) => {
     if (err) {
@@ -98,14 +82,8 @@ const addEmployee = (req, res) => {
       return res.status(500).json({ message: 'Error saving the employee details', error: err });
     }
 
-    db.query(queryEmergencyContact, emergencyContactValues, (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ message: 'Error saving the emergency contact details', error: err });
-      }
-
       res.status(201).json({ message: 'Employee added successfully', employeeId: employeeId });
-    });
+ 
   });
 };
 
