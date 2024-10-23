@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import {
   Dialog,
   DialogTitle,
@@ -10,7 +11,8 @@ import {
   Typography,
   Divider,
   Card,
-  CardContent
+  CardContent,
+  MenuItem,
 } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -40,6 +42,28 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
     supervisor: ''
   });
 
+  // Dummy data for dropdowns
+  const maritalStatusOptions = ['Married', 'Unmarrried'];
+  const genderOptions = ['Male', 'Female', 'Other'];
+  const [sectionOptions, setSections] = useState([]); // State to store section names
+  const departmentOptions = ['Operations', 'Support', 'Development', 'Marketing'];
+  const branchOptions = ['New York', 'San Francisco', 'Chicago', 'Los Angeles'];
+  const supervisorOptions = ['John Doe', 'Jane Smith', 'Michael Johnson'];
+
+  useEffect(() => {
+    // Fetch sections when the component loads
+    const fetchSections = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/employeeMoreInfo/section'); // Your backend API endpoint
+        setSections(response.data); // Set the fetched sections in state
+      } catch (error) {
+        console.error('Error fetching sections:', error);
+      }
+    };
+
+    fetchSections(); // Call the function to fetch section data
+  }, []);
+
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,10 +76,10 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
   // Handle form submission
   const handleSubmit = () => {
     axios
-      .post('http://localhost:3000/api/employee', formData) // Replace with your actual API endpoint
+      .post('http://localhost:3000/api/employee', formData)
       .then((response) => {
         console.log('Employee added:', response.data);
-        handleClose(); // Close the dialog
+        handleClose();
       })
       .catch((error) => {
         console.error('Error adding employee:', error);
@@ -126,23 +150,37 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  select
                   label="Marital Status"
                   name="maritalStatus"
                   variant="outlined"
                   fullWidth
                   value={formData.maritalStatus}
                   onChange={handleInputChange}
-                />
+                >
+                  {maritalStatusOptions.map((status) => (
+                    <MenuItem key={status} value={status}>
+                      {status}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  select
                   label="Gender"
                   name="gender"
                   variant="outlined"
                   fullWidth
                   value={formData.gender}
                   onChange={handleInputChange}
-                />
+                >
+                  {genderOptions.map((gender) => (
+                    <MenuItem key={gender} value={gender}>
+                      {gender}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -249,55 +287,82 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
             <Grid container spacing={4}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  select
                   label="Section Name"
                   name="sectionName"
                   variant="outlined"
                   fullWidth
                   value={formData.sectionName}
                   onChange={handleInputChange}
-                />
+                >
+                  {sectionOptions.map((section, index) => (
+                    <MenuItem key={index} value={section.section_name}>
+                      {section.section_name} {/* Access section_name correctly */}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  select
                   label="Department Name"
                   name="departmentName"
                   variant="outlined"
                   fullWidth
                   value={formData.departmentName}
                   onChange={handleInputChange}
-                />
+                >
+                  {departmentOptions.map((department) => (
+                    <MenuItem key={department} value={department}>
+                      {department}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  select
                   label="Branch Name"
                   name="branchName"
                   variant="outlined"
                   fullWidth
                   value={formData.branchName}
                   onChange={handleInputChange}
-                />
+                >
+                  {branchOptions.map((branch) => (
+                    <MenuItem key={branch} value={branch}>
+                      {branch}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  select
                   label="Supervisor"
                   name="supervisor"
                   variant="outlined"
                   fullWidth
                   value={formData.supervisor}
                   onChange={handleInputChange}
-                  InputProps={{
-                    startAdornment: <GroupIcon className="mr-2 text-primary" />
-                  }}
-                />
+                >
+                  {supervisorOptions.map((supervisor) => (
+                    <MenuItem key={supervisor} value={supervisor}>
+                      {supervisor}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
             </Grid>
           </CardContent>
         </Card>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">
-          Add
+        <Button onClick={handleClose} color="secondary">
+          Cancel
+        </Button>
+        <Button onClick={handleSubmit} color="primary">
+          Add Employee
         </Button>
       </DialogActions>
     </Dialog>
