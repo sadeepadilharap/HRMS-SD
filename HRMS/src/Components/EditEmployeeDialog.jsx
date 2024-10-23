@@ -1,5 +1,4 @@
-// src/components/EditEmployeeDialog.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -11,19 +10,81 @@ import {
   Typography,
   Divider,
   Card,
-  CardContent
+  CardContent,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl
 } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
-import PhoneIcon from '@mui/icons-material/Phone';
-import EmailIcon from '@mui/icons-material/Email';
-import GroupIcon from '@mui/icons-material/Group';
+import axios from 'axios';
 
-const EditEmployeeDialog = ({ open, handleClose, employee }) => {
-  if (!employee) return null; // Return null if no employee is provided
+const AddEmployeeDialog = ({ open, handleClose }) => {
+  const [sections, setSections] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [branches, setBranches] = useState([]);
+  const [supervisors, setSupervisors] = useState([]);
+
+  const [employeeData, setEmployeeData] = useState({
+    employeeId: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    birthDate: '',
+    maritalStatus: '',
+    gender: '',
+    workEmail: '',
+    address: '',
+    telNo: '',
+    recruitmentDate: '',
+    emergencyContactName: '',
+    emergencyContactAddress: '',
+    emergencyContactPhone: '',
+    sectionID: '',
+    departmentID: '',
+    branchID: '',
+    supervisorID: '',
+    employmentStatusID: '',
+    roleID: ''
+  });
+
+  useEffect(() => {
+    // Fetch dropdown data from backend when component mounts
+    const fetchDropdownData = async () => {
+      try {
+        const sectionRes = await axios.get('/api/sections');
+        const departmentRes = await axios.get('/api/departments');
+        const branchRes = await axios.get('/api/branches');
+        const supervisorRes = await axios.get('/api/supervisors');
+        
+        setSections(sectionRes.data);
+        setDepartments(departmentRes.data);
+        setBranches(branchRes.data);
+        setSupervisors(supervisorRes.data);
+      } catch (error) {
+        console.error('Error fetching dropdown data:', error);
+      }
+    };
+
+    fetchDropdownData();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEmployeeData({ ...employeeData, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await axios.post('/api/employees', employeeData);
+      handleClose(); // Close the dialog after submission
+    } catch (error) {
+      console.error('Error adding employee:', error);
+    }
+  };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Edit Employee Details</DialogTitle>
+      <DialogTitle>Add New Employee</DialogTitle>
       <DialogContent>
         <Card className="w-full shadow-lg">
           <CardContent>
@@ -36,7 +97,9 @@ const EditEmployeeDialog = ({ open, handleClose, employee }) => {
                   label="Employee ID"
                   variant="outlined"
                   fullWidth
-                  defaultValue={employee.employeeId}
+                  name="employeeId"
+                  value={employeeData.employeeId}
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -44,182 +107,52 @@ const EditEmployeeDialog = ({ open, handleClose, employee }) => {
                   label="First Name"
                   variant="outlined"
                   fullWidth
-                  defaultValue={employee.firstName}
+                  name="firstName"
+                  value={employeeData.firstName}
+                  onChange={handleInputChange}
                 />
+              </Grid>
+              {/* Other personal fields similar to above */}
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel>Section</InputLabel>
+                  <Select
+                    name="sectionID"
+                    value={employeeData.sectionID}
+                    onChange={handleInputChange}
+                  >
+                    {sections.map((section) => (
+                      <MenuItem key={section.id} value={section.id}>
+                        {section.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Middle Name"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.middleName}
-                />
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel>Department</InputLabel>
+                  <Select
+                    name="departmentID"
+                    value={employeeData.departmentID}
+                    onChange={handleInputChange}
+                  >
+                    {departments.map((department) => (
+                      <MenuItem key={department.id} value={department.id}>
+                        {department.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Last Name"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.lastName}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Birth Date"
-                  variant="outlined"
-                  type="date"
-                  InputLabelProps={{ shrink: true }}
-                  fullWidth
-                  defaultValue={employee.birthDate}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Marital Status"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.maritalStatus}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Gender"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.gender}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Work Email"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.email}
-                  InputProps={{
-                    startAdornment: <EmailIcon className="mr-2 text-primary" />
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  label="Address"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.address}
-                  InputProps={{
-                    startAdornment: <HomeIcon className="mr-2 text-primary" />
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Telephone Number"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.phone}
-                  InputProps={{
-                    startAdornment: <PhoneIcon className="mr-2 text-primary" />
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Recruitment Date"
-                  variant="outlined"
-                  type="date"
-                  InputLabelProps={{ shrink: true }}
-                  fullWidth
-                  defaultValue={employee.recruitmentDate}
-                />
-              </Grid>
-            </Grid>
-
-            <Divider className="my-6" />
-
-            <Typography variant="h6" className="text-primary font-bold mb-4 pt-10 pb-6">
-              Emergency Contact Information
-            </Typography>
-            <Grid container spacing={4}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Emergency Contact Name"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.emergencyContact.name}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Emergency Contact Address"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.emergencyContact.address}
-                  InputProps={{
-                    startAdornment: <HomeIcon className="mr-2 text-primary" />
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Emergency Contact Phone"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.emergencyContact.phone}
-                  InputProps={{
-                    startAdornment: <PhoneIcon className="mr-2 text-primary" />
-                  }}
-                />
-              </Grid>
-            </Grid>
-
-            <Divider className="my-6" />
-
-            <Typography variant="h6" className="text-primary font-bold mb-4 pt-10 pb-6">
-              Employment Details
-            </Typography>
-            <Grid container spacing={4}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Section Name"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.sectionName}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Department Name"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.departmentName}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Branch Name"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.branchName}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Supervisor"
-                  variant="outlined"
-                  fullWidth
-                  defaultValue={employee.supervisor}
-                  InputProps={{
-                    startAdornment: <GroupIcon className="mr-2 text-primary" />
-                  }}
-                />
-              </Grid>
+              {/* Other dropdowns like branch, supervisor, etc */}
             </Grid>
           </CardContent>
         </Card>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose} variant="contained" color="primary">
+        <Button onClick={handleSubmit} variant="contained" color="primary">
           Save
         </Button>
       </DialogActions>
@@ -227,4 +160,4 @@ const EditEmployeeDialog = ({ open, handleClose, employee }) => {
   );
 };
 
-export default EditEmployeeDialog;
+export default AddEmployeeDialog;

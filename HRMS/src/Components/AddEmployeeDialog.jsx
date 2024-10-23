@@ -44,7 +44,7 @@ const AddEmployeeDialog = ({ open, handleClose }) => {
   });
 
   // Dummy data for dropdowns
-  const maritalStatusOptions = ['Married', 'Unmarrried'];
+  const maritalStatusOptions = ['Married', 'Unmarried'];
   const genderOptions = ['Male', 'Female', 'Other'];
   const [sectionOptions, setSections] = useState([]);
   const [departmentOptions, setDepartmentOptions] = useState([]); // State for department options
