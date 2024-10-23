@@ -151,6 +151,20 @@ const EditEmployeeDialog = ({ open, handleClose, employee }) => {
     console.log('Selected department:', e.target.value);
   }
 
+  const handleSave = async (employee) => {
+    try {
+      const response = await axios.put(`http://localhost:3000/api/employee/${employee.employeeId}`, formData);
+      console.log('Employee updated successfully:', response.data);
+      // Optionally, you can call handleClose to close the dialog after saving
+      handleClose();
+    } catch (error) {
+      console.error('Error updating employee:', error);
+      // Optionally, you can display an error message to the user
+      alert('Failed to update employee. Please try again.');
+    }
+  };
+  
+
 
 
 
@@ -477,8 +491,8 @@ const EditEmployeeDialog = ({ open, handleClose, employee }) => {
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={() => handleSave(employee)} color="primary">
-          Save
+        <Button onClick={() => handleSave(employee)} variant="contained" color="primary">
+          Edit
         </Button>
       </DialogActions>
     </Dialog>

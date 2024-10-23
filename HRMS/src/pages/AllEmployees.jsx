@@ -78,7 +78,7 @@ const AllEmployees = () => {
             address: employee.employee_address,  // Actual employee address from JSON
             telephoneNumber: employee.employee_tel_no,  // Actual telephone number from JSON
             recruitmentDate: employee.recruitment_date  // Actual recruitment date from JSON
-            
+
         });
         setOpenViewDialog(true);
     };
@@ -135,6 +135,23 @@ const AllEmployees = () => {
     const handleDelete = (employee) => {
         setSelectedEmployee(employee);
         setOpenDeleteDialog(true); // Open delete confirmation dialog
+    };
+
+    const handleDeleteEmployee = async (employeeId) => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/employee/${employeeId}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                // Remove the deleted employee from the state
+                setEmployees((prevEmployees) => prevEmployees.filter(employee => employee.employee_id !== employeeId));
+                console.log(`Employee with ID ${employeeId} deleted successfully.`);
+            } else {
+                console.error('Error deleting employee:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error deleting employee:', error);
+        }
     };
 
     return (
@@ -204,7 +221,7 @@ const AllEmployees = () => {
                     <TableBody>
                         {employees.map((employee) => (
                             <TableRow key={employee.id} className="hover:bg-gray-50 transition duration-300">
-                                
+
                                 <TableCell>{`${employee.first_name} ${employee.middle_name} ${employee.last_name}`}</TableCell>
                                 <TableCell>{employee.company_work_email}</TableCell>
                                 <TableCell>{employee.employee_id}</TableCell>
@@ -250,7 +267,12 @@ const AllEmployees = () => {
 
             {/* Delete Confirmation Dialog */}
             {openDeleteDialog && selectedEmployee && (
-                <DeleteConfirmationDialog open={openDeleteDialog} handleClose={() => setOpenDeleteDialog(false)} employee={selectedEmployee} />
+                <DeleteConfirmationDialog
+                    open={openDeleteDialog}
+                    handleClose={() => setOpenDeleteDialog(false)}
+                    employee={selectedEmployee}
+                    onConfirmDelete={handleDeleteEmployee} // Pass the delete function here
+                />
             )}
         </div>
     );

@@ -170,3 +170,53 @@ const editEmployee = (req, res) => {
 
 export { editEmployee };
 
+
+
+const deleteEmployee = (req, res) => {
+  const { id } = req.params;
+
+  // Check if the employee exists
+  const checkEmployeeQuery = `
+    SELECT * FROM employee WHERE employee_id = ?
+  `;
+
+  db.query(checkEmployeeQuery, [id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error checking employee existence', error: err });
+    }
+    
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    // Delete related records first
+    const deleteRelatedQueries = `
+      DELETE FROM leave_request WHERE employee_id = ?;
+      DELETE FROM salary_record WHERE employee_id = ?;
+      DELETE FROM approved_leaves WHERE Employee_ID = ?;
+      DELETE FROM custom_employee_attributes WHERE employee_id = ?;
+      DELETE FROM user_account WHERE employee_id = ?;
+    `;
+
+    db.query(deleteRelatedQueries, [id, id, id, id, id], (err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Error deleting related records', error: err });
+      }
+
+      // Now delete the employee
+      const deleteEmployeeQuery = `
+        DELETE FROM employee WHERE employee_id = ?
+      `;
+
+      db.query(deleteEmployeeQuery, [id], (err) => {
+        if (err) {
+          return res.status(500).json({ message: 'Error deleting the employee', error: err });
+        }
+        res.status(200).json({ message: 'Employee deleted successfully' });
+      });
+    });
+  });
+};
+
+export { deleteEmployee };
+

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
 
-const DeleteConfirmationDialog = ({ open, handleClose, employee }) => {
+const DeleteConfirmationDialog = ({ open, handleClose, employee, onConfirmDelete }) => {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>Confirm Delete</DialogTitle>
@@ -14,7 +14,10 @@ const DeleteConfirmationDialog = ({ open, handleClose, employee }) => {
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button 
-          onClick={() => handleClose(true)} 
+          onClick={() => {
+            onConfirmDelete(employee.employee_id); // Call the delete function
+            handleClose(); // Close the dialog
+          }} 
           variant="contained" 
           sx={{ backgroundColor: 'red', color: 'white', '&:hover': { backgroundColor: '#b22222' } }} // Custom red styling
         >
