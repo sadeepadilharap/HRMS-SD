@@ -1,5 +1,5 @@
 // src/pages/AllEmployees.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     TextField, IconButton, MenuItem, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Avatar, Typography, Tooltip
 } from '@mui/material';
@@ -29,7 +29,7 @@ const AllEmployees = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const response = await fetch('/api/employees'); // Replace with your actual API route
+                const response = await fetch('http://localhost:3000/api/employee'); // Replace with your actual API route
                 const data = await response.json();
                 setEmployees(data); // Set the fetched employee data
             } catch (error) {
@@ -55,27 +55,30 @@ const AllEmployees = () => {
     const handleViewMore = (employee) => {
         console.log("View more clicked for", employee); // For debugging
         setSelectedEmployee({
-            employeeId: employee.id,
-            name: employee.name,
-            email: employee.email,
-            phone: employee.phone,
-            role: employee.role,
+            employeeId: employee.employee_id,
+            firstName: employee.first_name,
+            middleName: employee.middle_name,
+            lastName: employee.last_name,
+            email: employee.company_work_email,
+            phone: employee.employee_tel_no,
+            role: employee.role_name,
             emergencyContact: {
-                name: 'Jane Doe', // Placeholder, replace with actual data
-                address: '456 Elm St, Anytown, USA', // Placeholder
-                phone: '(987) 654-3210' // Placeholder
+                name: employee.emergency_contact_name,  // Replace placeholder with actual data
+                address: employee.emergency_contact_address,  // Replace with actual data
+                phone: employee.emergency_contact_tel_no  // Replace with actual data
             },
-            sectionName: 'IT Department', // Placeholder
-            departmentName: 'Technology', // Placeholder
-            branchName: 'Main Branch', // Placeholder
-            supervisor: 'Alice Smith', // Placeholder
-            birthDate: '1990-01-01', // Placeholder
-            maritalStatus: 'Single', // Placeholder
-            gender: 'Male', // Placeholder
-            workEmail: 'john.doe@example.com', // Placeholder
-            address: '123 Main St, Anytown, USA', // Placeholder
-            telephoneNumber: '(123) 456-7890', // Placeholder
-            recruitmentDate: '2022-01-01' // Placeholder
+            sectionName: employee.section_name,  // Actual section name from JSON
+            departmentName: employee.department_name,  // Actual department name from JSON
+            branchName: employee.branch_name,  // Actual branch name from JSON
+            supervisor: employee.supervisor_name,  // Actual supervisor name from JSON
+            birthDate: employee.birth_date,  // Actual birth date from JSON
+            maritalStatus: employee.marital_status,  // Actual marital status from JSON
+            gender: employee.gender,  // Actual gender from JSON
+            workEmail: employee.company_work_email,  // Actual work email from JSON
+            address: employee.employee_address,  // Actual employee address from JSON
+            telephoneNumber: employee.employee_tel_no,  // Actual telephone number from JSON
+            recruitmentDate: employee.recruitment_date  // Actual recruitment date from JSON
+            
         });
         setOpenViewDialog(true);
     };
@@ -83,27 +86,29 @@ const AllEmployees = () => {
     const handleEdit = (employee) => {
         console.log("Edit clicked for", employee); // For debugging
         setSelectedEmployee({
-            employeeId: employee.id,
-            name: employee.name,
-            email: employee.email,
-            phone: employee.phone,
-            role: employee.role,
+            employeeId: employee.employee_id,
+            firstName: employee.first_name,
+            middleName: employee.middle_name,
+            lastName: employee.last_name,            email: employee.company_work_email,
+            phone: employee.employee_tel_no,
+            role: employee.role_name,
             emergencyContact: {
-                name: 'Jane Doe', // Placeholder, replace with actual data
-                address: '456 Elm St, Anytown, USA', // Placeholder
-                phone: '(987) 654-3210' // Placeholder
+                name: employee.emergency_contact_name,  // Replace placeholder with actual data
+                address: employee.emergency_contact_address,  // Replace with actual data
+                phone: employee.emergency_contact_tel_no  // Replace with actual data
             },
-            sectionName: 'IT Department', // Placeholder
-            departmentName: 'Technology', // Placeholder
-            branchName: 'Main Branch', // Placeholder
-            supervisor: 'Alice Smith', // Placeholder
-            birthDate: '1990-01-01', // Placeholder
-            maritalStatus: 'Single', // Placeholder
-            gender: 'Male', // Placeholder
-            workEmail: 'john.doe@example.com', // Placeholder
-            address: '123 Main St, Anytown, USA', // Placeholder
-            telephoneNumber: '(123) 456-7890', // Placeholder
-            recruitmentDate: '2022-01-01' // Placeholder
+            sectionName: employee.section_name,  // Actual section name from JSON
+            departmentName: employee.department_name,  // Actual department name from JSON
+            branchName: employee.branch_name,  // Actual branch name from JSON
+            supervisor: employee.supervisor_name,  // Actual supervisor name from JSON
+            birthDate: employee.birth_date,  // Actual birth date from JSON
+            maritalStatus: employee.marital_status,  // Actual marital status from JSON
+            gender: employee.gender,  // Actual gender from JSON
+            workEmail: employee.company_work_email,  // Actual work email from JSON
+            address: employee.employee_address,  // Actual employee address from JSON
+            telephoneNumber: employee.employee_tel_no,  // Actual telephone number from JSON
+            recruitmentDate: employee.recruitment_date  // Actual recruitment date from JSON
+            
         });
         setOpenEditDialog(true);
     };
@@ -169,7 +174,6 @@ const AllEmployees = () => {
                 <Table>
                     <TableHead>
                         <TableRow className="bg-gray-100">
-                            <TableCell><strong>Profile</strong></TableCell>
                             <TableCell><strong>Name</strong></TableCell>
                             <TableCell><strong>Email</strong></TableCell>
                             <TableCell><strong>Employee ID</strong></TableCell>
@@ -181,14 +185,12 @@ const AllEmployees = () => {
                     <TableBody>
                         {employees.map((employee) => (
                             <TableRow key={employee.id} className="hover:bg-gray-50 transition duration-300">
-                                <TableCell>
-                                    <Avatar src={employee.image} alt={employee.name} />
-                                </TableCell>
-                                <TableCell>{employee.name}</TableCell>
-                                <TableCell>{employee.email}</TableCell>
-                                <TableCell>{employee.id}</TableCell>
-                                <TableCell>{employee.phone}</TableCell>
-                                <TableCell>{employee.role}</TableCell>
+                                
+                                <TableCell>{`${employee.first_name} ${employee.middle_name} ${employee.last_name}`}</TableCell>
+                                <TableCell>{employee.company_work_email}</TableCell>
+                                <TableCell>{employee.employee_id}</TableCell>
+                                <TableCell>{employee.employee_tel_no}</TableCell>
+                                <TableCell>{employee.role_name}</TableCell>
                                 <TableCell>
                                     <Tooltip title="View More Info">
                                         <IconButton color="primary" className="mr-2" onClick={() => handleViewMore(employee)}>

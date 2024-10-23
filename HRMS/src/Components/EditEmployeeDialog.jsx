@@ -44,7 +44,7 @@ const EditEmployeeDialog = ({ open, handleClose, employee }) => {
                   label="First Name"
                   variant="outlined"
                   fullWidth
-                  defaultValue={employee.name}
+                  defaultValue={employee.firstName}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -136,7 +136,7 @@ const EditEmployeeDialog = ({ open, handleClose, employee }) => {
 
             <Divider className="my-6" />
 
-            <Typography variant="h6" className="text-primary font-bold mb-4 pb-6">
+            <Typography variant="h6" className="text-primary font-bold mb-4 pt-10 pb-6">
               Emergency Contact Information
             </Typography>
             <Grid container spacing={4}>
