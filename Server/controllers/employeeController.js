@@ -105,6 +105,8 @@ const getAllEmployees = (req, res) => {
 
 export { getAllEmployees };
 
+
+
 // Function to edit an employee
 const editEmployee = (req, res) => {
   const { id } = req.params;

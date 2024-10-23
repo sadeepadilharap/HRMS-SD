@@ -89,26 +89,45 @@ const AllEmployees = () => {
             employeeId: employee.employee_id,
             firstName: employee.first_name,
             middleName: employee.middle_name,
-            lastName: employee.last_name,            email: employee.company_work_email,
+            lastName: employee.last_name,
+            email: employee.company_work_email,
             phone: employee.employee_tel_no,
-            role: employee.role_name,
-            emergencyContact: {
-                name: employee.emergency_contact_name,  // Replace placeholder with actual data
-                address: employee.emergency_contact_address,  // Replace with actual data
-                phone: employee.emergency_contact_tel_no  // Replace with actual data
+            role: {
+                roleId: employee.role_id,  // Added role_id
+                roleName: employee.role_name
             },
-            sectionName: employee.section_name,  // Actual section name from JSON
-            departmentName: employee.department_name,  // Actual department name from JSON
-            branchName: employee.branch_name,  // Actual branch name from JSON
-            supervisor: employee.supervisor_name,  // Actual supervisor name from JSON
-            birthDate: employee.birth_date,  // Actual birth date from JSON
-            maritalStatus: employee.marital_status,  // Actual marital status from JSON
-            gender: employee.gender,  // Actual gender from JSON
-            workEmail: employee.company_work_email,  // Actual work email from JSON
-            address: employee.employee_address,  // Actual employee address from JSON
-            telephoneNumber: employee.employee_tel_no,  // Actual telephone number from JSON
-            recruitmentDate: employee.recruitment_date  // Actual recruitment date from JSON
-            
+            emergencyContact: {
+                name: employee.emergency_contact_name,
+                address: employee.emergency_contact_address,
+                phone: employee.emergency_contact_tel_no
+            },
+            section: {
+                sectionId: employee.section_id,  // Added section_id
+                sectionName: employee.section_name
+            },
+            department: {
+                departmentId: employee.department_id,  // Added department_id
+                departmentName: employee.department_name
+            },
+            branch: {
+                branchId: employee.branch_id,  // Added branch_id
+                branchName: employee.branch_name
+            },
+            supervisor: {
+                supervisorId: employee.supervisor_id,  // Added supervisor_id
+                supervisorName: employee.supervisor_name
+            },
+            employmentStatus: {
+                employmentStatusId: employee.employment_status_id,  // Added employment_status_id
+                employmentStatusName: employee.employment_status_name
+            },
+            birthDate: employee.birth_date,
+            maritalStatus: employee.marital_status,
+            gender: employee.gender,
+            workEmail: employee.company_work_email,
+            address: employee.employee_address,
+            telephoneNumber: employee.employee_tel_no,
+            recruitmentDate: employee.recruitment_date
         });
         setOpenEditDialog(true);
     };
