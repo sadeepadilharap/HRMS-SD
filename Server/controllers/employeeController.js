@@ -1,4 +1,5 @@
 import router from '../Routes/employeeRoute.js';
+import con from '../utils/db.js';
 import db from '../utils/db.js';
 
 // Function to add a new employee
@@ -174,6 +175,7 @@ export { editEmployee };
 
 const deleteEmployee = (req, res) => {
   const { id } = req.params;
+  console.log(id);
 
   // Check if the employee exists
   const checkEmployeeQuery = `
@@ -182,6 +184,7 @@ const deleteEmployee = (req, res) => {
 
   db.query(checkEmployeeQuery, [id], (err, results) => {
     if (err) {
+      console.log(err);
       return res.status(500).json({ message: 'Error checking employee existence', error: err });
     }
     
@@ -189,32 +192,44 @@ const deleteEmployee = (req, res) => {
       return res.status(404).json({ message: 'Employee not found' });
     }
 
-    // Delete related records first
-    const deleteRelatedQueries = `
-      DELETE FROM leave_request WHERE employee_id = ?;
-      DELETE FROM salary_record WHERE employee_id = ?;
-      DELETE FROM approved_leaves WHERE Employee_ID = ?;
-      DELETE FROM custom_employee_attributes WHERE employee_id = ?;
-      DELETE FROM user_account WHERE employee_id = ?;
-    `;
+    // Delete related records one by one
+    const deleteRelatedRecords = () => {
+      const queries = [
+        'DELETE FROM leave_request WHERE employee_id = ?',
+        'DELETE FROM salary_record WHERE employee_id = ?',
+        'DELETE FROM approved_leaves WHERE Employee_ID = ?',
+        'DELETE FROM custom_employee_attributes WHERE employee_id = ?',
+        'DELETE FROM user_account WHERE employee_id = ?'
+      ];
 
-    db.query(deleteRelatedQueries, [id, id, id, id, id], (err) => {
-      if (err) {
-        return res.status(500).json({ message: 'Error deleting related records', error: err });
-      }
-
-      // Now delete the employee
-      const deleteEmployeeQuery = `
-        DELETE FROM employee WHERE employee_id = ?
-      `;
-
-      db.query(deleteEmployeeQuery, [id], (err) => {
-        if (err) {
-          return res.status(500).json({ message: 'Error deleting the employee', error: err });
+      const runQuery = (index) => {
+        if (index >= queries.length) {
+          // Now delete the employee after deleting related records
+          const deleteEmployeeQuery = 'DELETE FROM employee WHERE employee_id = ?';
+          db.query(deleteEmployeeQuery, [id], (err) => {
+            if (err) {
+              console.log(err);
+              return res.status(500).json({ message: 'Error deleting the employee', error: err });
+            }
+            return res.status(200).json({ message: 'Employee deleted successfully' });
+          });
+          return;
         }
-        res.status(200).json({ message: 'Employee deleted successfully' });
-      });
-    });
+
+        db.query(queries[index], [id], (err) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({ message: 'Error deleting related records', error: err });
+          }
+          runQuery(index + 1);
+        });
+      };
+
+      // Start the first query
+      runQuery(0);
+    };
+
+    deleteRelatedRecords();
   });
 };
 
