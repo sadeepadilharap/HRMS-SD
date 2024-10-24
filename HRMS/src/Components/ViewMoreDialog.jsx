@@ -113,22 +113,32 @@ const ViewMoreDialog = ({ open, handleClose, employee }) => {
             <Grid container spacing={4}>
               <Grid item xs={12} sm={6}>
                 <Typography variant="body1">
-                  <strong>Section Name:</strong> {employee.sectionName}
+                  <strong>Section Name:</strong> {employee.section.sectionName}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="body1">
-                  <strong>Department Name:</strong> {employee.departmentName}
+                  <strong>Department Name:</strong> {employee.department.departmentName}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="body1">
-                  <strong>Branch Name:</strong> {employee.branchName}
+                  <strong>Branch Name:</strong> {employee.branch.branchName}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="body1">
-                  <strong>Supervisor:</strong> {employee.supervisor}
+                  <strong>Supervisor:</strong> {employee.supervisor.supervisorName}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body1">
+                  <strong>Role:</strong> {employee.role.roleName}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body1">
+                  <strong>Employment Status:</strong> {employee.employmentStatus.employmentStatusName}
                 </Typography>
               </Grid>
             </Grid>
